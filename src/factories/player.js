@@ -3,6 +3,15 @@ import { randomCoordinates } from './helpers/helpers.js'
 const Player = () => {
   const attack = (x, y, enemyBoard) => enemyBoard.receiveAttack(x, y)
 
+  // const attack = (x, y, enemyBoard) => {
+  //   const targetCell = enemyBoard.getBoard()[x][y]
+  //   if (targetCell === 'miss' || targetCell === 'hit') {
+  //     return false
+  //   } else {
+  //     enemyBoard.receiveAttack(x, y)
+  //   }
+  // }
+
   const autoAttack = (enemyBoard) => {
     const [x, y] = randomCoordinates()
     const targetCell = enemyBoard.getBoard()[x][y]

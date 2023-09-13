@@ -70,6 +70,7 @@ const Gameboard = () => {
     let target = board[x][y]
     if (target === null) {
       board[x][y] = 'miss'
+      return board[x][y]
       // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()

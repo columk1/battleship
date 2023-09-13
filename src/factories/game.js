@@ -12,11 +12,7 @@ const Game = () => {
   playerBoard.autoPlaceFleet()
   computerBoard.autoPlaceFleet()
 
-  const gameOver = () => {
-    if (playerBoard.allShipsSunk() || computerBoard.allShipsSunk()) {
-      return true
-    }
-  }
+  const gameOver = () => (playerBoard.allShipsSunk() || computerBoard.allShipsSunk() ? true : false)
 
   const declareWinner = () => {
     if (playerBoard.allShipsSunk()) {
@@ -26,18 +22,20 @@ const Game = () => {
     }
   }
   const startGame = () => {
-    while (!gameOver) {
+    while (!gameOver()) {
       if (!playerTurn) {
-        computerBoard.autoAttack(playerBoard)
+        alert(computer.autoAttack(playerBoard))
         playerTurn = true
+      } else {
+        // const input = prompt('Player turn: Enter coordinates (x, y)').split(',')
+        // const [x, y] = input
+        // player.attack(x, y, computerBoard)
+        alert(player.autoAttack(computerBoard))
+        playerTurn = !playerTurn
+        //   setTimeout(() => {
+        //     playerTurn = !playerTurn
+        //   }, 1000)
       }
-      const input = prompt('Player turn: Enter coordinates (x, y)').split(',')
-      const [x, y] = input
-      player.attack(x, y, computerBoard)
-      playerTurn = !playerTurn
-      //   setTimeout(() => {
-      //     playerTurn = !playerTurn
-      //   }, 1000)
     }
     declareWinner()
   }
