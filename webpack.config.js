@@ -10,7 +10,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: '<Project-Title>',
+      title: 'Battleship',
+      template: './src/index.html',
     }),
   ],
   output: {
