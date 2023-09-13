@@ -1,5 +1,7 @@
 const Gameboard = () => {
   const SIZE = 10
+  const ships = []
+  const misses = []
 
   // Create a grid
   let board = Array(SIZE)
@@ -18,6 +20,7 @@ const Gameboard = () => {
         board[x + i][y] = ship
       }
     }
+    return ships.push(ship)
   }
 
   const isValidPlacement = (ship, x, y, isVertical) => {
@@ -44,15 +47,26 @@ const Gameboard = () => {
     return true
   }
 
-  function getCoords(x, y) {
-    return x < SIZE || y < SIZE ? undefined : board[x][y]
+  const getCell = (x, y) => (x < SIZE || y < SIZE ? undefined : board[x][y])
+
+  const receiveAttack = (x, y) => {
+    const target = board[x][y]
+    if (target === null) {
+      if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
+    } else {
+      target.hit()
+    }
+    return target
   }
+
+  const allShipsSunk = () => ships.every((ship) => ship.isSunk())
 
   return {
     board,
+    misses,
     placeShip,
-    isValidPlacement,
-    getCoords,
+    receiveAttack,
+    allShipsSunk,
   }
 }
 export default Gameboard
