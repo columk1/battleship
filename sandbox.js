@@ -1,8 +1,5 @@
-import Ship from './src/model/ship'
+import Game from './src/factories/game.js'
 
-const randomNum = (size) => Math.floor(Math.random() * size)
-const randomCoordinates = (size = 10) => [randomNum(size), randomNum(size)]
+const game = Game()
 
-const [x, y] = randomCoordinates()
-
-console.log(x, y)
+game.startGame()

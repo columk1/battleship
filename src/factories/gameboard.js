@@ -1,5 +1,5 @@
-import { randomCoordinates } from './helpers/helpers'
-import Ship from './ship'
+import { randomCoordinates } from './helpers/helpers.js'
+import Ship from './ship.js'
 
 const Gameboard = () => {
   const SIZE = 10
