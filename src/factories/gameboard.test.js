@@ -1,7 +1,7 @@
 import Gameboard from './gameboard'
 import Ship from './ship'
 
-describe('Gameboard', () => {
+describe('Ships placed manually', () => {
   const board = Gameboard()
   const ship = Ship(3)
 
@@ -11,15 +11,15 @@ describe('Gameboard', () => {
     })
 
     test('When ship is placed outside of board', () => {
-      expect(board.placeShip(ship, 10, 10)).toBe('Invalid placement')
+      expect(board.placeShip(ship, 10, 10)).toBeFalsy()
     })
 
     test('When ship does not fit on board', () => {
-      expect(board.placeShip(ship, 8, 0)).toBe('Invalid placement')
+      expect(board.placeShip(ship, 8, 0)).toBeFalsy()
     })
 
     test('When vertical ship does not fit on board', () => {
-      expect(board.placeShip(ship, 0, 8, true)).toBe('Invalid placement')
+      expect(board.placeShip(ship, 0, 8, true)).toBeFalsy()
     })
 
     test('When ship is placed on board horizontally', () => {
@@ -34,16 +34,16 @@ describe('Gameboard', () => {
 
     test('When a ship overlaps another ship', () => {
       board.placeShip(ship, 0, 0)
-      expect(board.placeShip(ship, 0, 0)).toBe('Invalid placement')
+      expect(board.placeShip(ship, 0, 0)).toBeFalsy()
     })
 
     test('When a vertical ship overlaps another ship', () => {
       board.placeShip(ship, 0, 2)
-      expect(board.placeShip(ship, 2, 0, true)).toBe('Invalid placement')
+      expect(board.placeShip(ship, 2, 0, true)).toBeFalsy()
     })
   })
 
-  describe('Recieve Attack', () => {
+  describe('Recieve Attacks', () => {
     board.placeShip(ship, 0, 0)
 
     test('When ship is hit', () => {
@@ -77,5 +77,13 @@ describe('Gameboard', () => {
     test('When all ships on board are sunk', () => {
       expect(board.allShipsSunk()).toBe(true)
     })
+  })
+})
+
+describe('Ships placed automatically', () => {
+  const board = Gameboard()
+  test('When the whole fleet is placed automatically', () => {
+    board.autoPlaceFleet()
+    expect(board.getShips().length).toBe(5)
   })
 })

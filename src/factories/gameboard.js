@@ -1,7 +1,10 @@
+import { randomCoordinates } from './helpers/helpers'
+import Ship from './ship'
+
 const Gameboard = () => {
   const SIZE = 10
+  const SHIP_LENGTHS = [5, 4, 3, 3, 2]
   const ships = []
-  const misses = []
 
   // Create a grid
   let board = Array(SIZE)
@@ -9,9 +12,10 @@ const Gameboard = () => {
     .map(() => Array(SIZE).fill(null))
 
   const getBoard = () => board
+  const getShips = () => ships
 
   const placeShip = (ship, x, y, isVertical) => {
-    if (!isValidPlacement(ship, x, y, isVertical)) return 'Invalid placement'
+    if (!isValidPlacement(ship, x, y, isVertical)) return 0
 
     if (isVertical) {
       for (let i = 0; i < ship.length; i++) {
@@ -23,6 +27,17 @@ const Gameboard = () => {
       }
     }
     return ships.push(ship)
+  }
+
+  const autoPlaceShip = (ship) => {
+    const [x, y] = randomCoordinates()
+    const isVertical = Math.random() > 0.5
+    const isPlaced = placeShip(ship, x, y, isVertical)
+    if (!isPlaced) autoPlaceShip(ship)
+  }
+
+  const autoPlaceFleet = (fleet) => {
+    SHIP_LENGTHS.forEach((length) => autoPlaceShip(Ship(length)))
   }
 
   const isValidPlacement = (ship, x, y, isVertical) => {
@@ -60,14 +75,17 @@ const Gameboard = () => {
       target.hit()
       board[x][y] = 'hit'
     }
-    return target
+    return board[x][y]
   }
 
   const allShipsSunk = () => ships.every((ship) => ship.isSunk())
 
   return {
     getBoard,
+    getShips,
     placeShip,
+    autoPlaceShip,
+    autoPlaceFleet,
     receiveAttack,
     allShipsSunk,
   }
