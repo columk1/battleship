@@ -8,6 +8,8 @@ const Gameboard = () => {
     .fill(null)
     .map(() => Array(SIZE).fill(null))
 
+  const getBoard = () => board
+
   const placeShip = (ship, x, y, isVertical) => {
     if (!isValidPlacement(ship, x, y, isVertical)) return 'Invalid placement'
 
@@ -50,11 +52,13 @@ const Gameboard = () => {
   const getCell = (x, y) => (x < SIZE || y < SIZE ? undefined : board[x][y])
 
   const receiveAttack = (x, y) => {
-    const target = board[x][y]
+    let target = board[x][y]
     if (target === null) {
-      if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
+      board[x][y] = 'miss'
+      // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()
+      board[x][y] = 'hit'
     }
     return target
   }
@@ -62,8 +66,7 @@ const Gameboard = () => {
   const allShipsSunk = () => ships.every((ship) => ship.isSunk())
 
   return {
-    board,
-    misses,
+    getBoard,
     placeShip,
     receiveAttack,
     allShipsSunk,

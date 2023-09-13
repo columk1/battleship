@@ -7,7 +7,7 @@ describe('Gameboard', () => {
 
   describe('Place a ship', () => {
     test('When board is initialized', () => {
-      expect(board.board[8][8]).toBe(null)
+      expect(board.getBoard()[8][8]).toBe(null)
     })
 
     test('When ship is placed outside of board', () => {
@@ -24,12 +24,12 @@ describe('Gameboard', () => {
 
     test('When ship is placed on board horizontally', () => {
       board.placeShip(ship, 0, 0)
-      expect(board.board[2][0]).toBe(ship)
+      expect(board.getBoard()[2][0]).toBe(ship)
     })
 
     test('When ship is placed on board vertically', () => {
       board.placeShip(ship, 0, 2, true)
-      expect(board.board[0][0]).toBe(ship)
+      expect(board.getBoard()[0][0]).toBe(ship)
     })
 
     test('When a ship overlaps another ship', () => {
@@ -48,30 +48,30 @@ describe('Gameboard', () => {
 
     test('When ship is hit', () => {
       board.receiveAttack(0, 0)
-      expect(board.board[0][0].getHits()).toBe(1)
+      expect(ship.getHits()).toBe(1)
     })
 
     test('When ship is missed', () => {
       board.receiveAttack(3, 0)
-      expect(board.board[3][0]).toBe(null)
-      expect(board.misses[0]).toEqual({ x: 3, y: 0 })
+      expect(board.getBoard()[3][0]).toBe('miss')
     })
 
-    test('When a cell with no ship is hit twice', () => {
-      board.receiveAttack(3, 0)
-      expect(board.misses.length).toBe(1)
-    })
+    // Test was to test array duplicates, not needed with 'hit' or 'miss' implementation
+    // test('When a cell with no ship is hit twice', () => {
+    //   board.receiveAttack(3, 0)
+    //   expect(board.board[3][0]).toBe('miss')
+    // })
 
     test('When a cell with a ship is hit twice', () => {})
 
     test('When a ship receives a second hit', () => {
       board.receiveAttack(1, 0)
-      expect(board.board[1][0].getHits()).toBe(2)
+      expect(ship.getHits()).toBe(2)
     })
 
     test('When a ship is sunk', () => {
       board.receiveAttack(2, 0)
-      expect(board.board[2][0].isSunk()).toBe(true)
+      expect(ship.isSunk()).toBe(true)
     })
 
     test('When all ships on board are sunk', () => {
