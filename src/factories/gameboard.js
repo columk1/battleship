@@ -84,6 +84,14 @@ const Gameboard = () => {
     return adjacentCells.filter((cell) => validTarget(cell))
   }
 
+  const getAdjacentHorizontalCells = (x, y) => {
+    const adjacentCells = [
+      [x + 1, y],
+      [x - 1, y],
+    ]
+    return adjacentCells.filter((cell) => validTarget(cell))
+  }
+
   const receiveAttack = (x, y) => {
     let target = board[x][y]
     if (target === null) {
@@ -106,6 +114,7 @@ const Gameboard = () => {
     autoPlaceShip,
     autoPlaceFleet,
     getAdjacentCells,
+    getAdjacentHorizontalCells,
     receiveAttack,
     allShipsSunk,
   }

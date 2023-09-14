@@ -15,21 +15,22 @@ const Player = () => {
 
   const autoAttack = (enemyBoard) => {
     let [x, y] = randomCoordinatesParity()
-    if (possibleAttacks.length > 0) {
-      ;[x, y] = possibleAttacks.pop()
-    }
+
+    if (possibleAttacks.length > 0) [x, y] = possibleAttacks.pop()
+
     const targetCell = enemyBoard.getBoard()[x][y]
     if (targetCell === 'miss' || targetCell === 'hit') {
       autoAttack(enemyBoard)
     } else {
-      let attackResult = enemyBoard.receiveAttack(x, y)
+      let attackResult = enemyBoard.receiveAttack(x, y) // -> { state: 'hit', isSunk: false }
       if (attackResult.state === 'hit') {
         if (!attackResult.isSunk) {
           possibleAttacks = [...possibleAttacks, ...enemyBoard.getAdjacentCells(x, y)]
-          console.log(possibleAttacks)
+        } else {
+          possibleAttacks = []
         }
       }
-      return attackResult.state
+      return attackResult.state // -> 'hit' || 'miss'
     }
   }
 
