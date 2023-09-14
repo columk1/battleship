@@ -54,13 +54,13 @@ const View = () => {
         const y = e.target.dataset.y
         gameboard2.receiveAttack(x, y)
         renderBoards(gameboard1, gameboard2)
+        // Process computer's turn and wait for timeout to complete before re-rendering
         await callback()
         renderBoards(gameboard1, gameboard2)
         addGridListeners(gameboard1, gameboard2, callback)
       })
     })
   }
-
   return { renderBoards, addGridListeners }
 }
 
