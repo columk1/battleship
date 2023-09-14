@@ -72,6 +72,10 @@ header {
   background-color: blue;
 }
 
+/* #board1 .cell {
+  background-color: red;
+} */
+
 .label {
   font-size: 1.5rem;
   font-weight: bold;

@@ -30,16 +30,36 @@ const Game = () => {
         // const input = prompt('Player turn: Enter coordinates (x, y)').split(',')
         // const [x, y] = input
         // player.attack(x, y, computerBoard)
-        alert(player.autoAttack(computerBoard))
-        playerTurn = !playerTurn
-        //   setTimeout(() => {
-        //     playerTurn = !playerTurn
-        //   }, 1000)
+        // playerTurn = !playerTurn
+        setTimeout(() => {
+          playerTurn = !playerTurn
+        }, 1000)
       }
     }
     declareWinner()
   }
 
-  return { player, computer, playerTurn, playerBoard, computerBoard, gameOver, startGame }
+  const nextTurn = () => {
+    if (gameOver()) {
+      declareWinner()
+    } else {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(computer.autoAttack(playerBoard))
+        }, 1000)
+      })
+    }
+  }
+
+  return {
+    player,
+    computer,
+    playerTurn,
+    playerBoard,
+    computerBoard,
+    gameOver,
+    startGame,
+    nextTurn,
+  }
 }
 export default Game

@@ -18,7 +18,7 @@ const View = () => {
     cell.classList.add(state, 'cell')
     return cell
   }
-  const renderBoard = (gameboard) => {
+  const renderGrid = (gameboard) => {
     const board = gameboard.getBoard()
     const grid = document.createElement('div')
     grid.classList.add('grid')
@@ -31,20 +31,47 @@ const View = () => {
     return grid
   }
 
-  const renderBoards = (gameboard1, gameboard2) => {
-    board1.appendChild(renderBoard(gameboard1))
-    board2.appendChild(renderBoard(gameboard2))
+  const renderBoard2 = (gameboard) => {
+    board2.innerHTML = ''
+    board2.appendChild(renderGrid(gameboard))
   }
 
-  return { renderBoards }
+  const renderBoards = (gameboard1, gameboard2) => {
+    board1.innerHTML = ''
+    board2.innerHTML = ''
+    board1.appendChild(renderGrid(gameboard1))
+    board2.appendChild(renderGrid(gameboard2))
+  }
+
+  // callback is the game.nextTurn function passed in by the Controller
+  const addGridListeners = (gameboard1, gameboard2, callback) => {
+    // Add listeners to computer's board
+    const cells = document.querySelectorAll('#board2 .cell')
+    cells.forEach((cell) => {
+      cell.addEventListener('click', async (e) => {
+        if (e.target.classList.contains('miss') || e.target.classList.contains('hit')) return
+        const x = e.target.dataset.x
+        const y = e.target.dataset.y
+        gameboard2.receiveAttack(x, y)
+        renderBoards(gameboard1, gameboard2)
+        await callback()
+        renderBoards(gameboard1, gameboard2)
+        addGridListeners(gameboard1, gameboard2, callback)
+      })
+    })
+  }
+
+  return { renderBoards, addGridListeners }
 }
 
 const Controller = (game, view) => {
   const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
+  const startGame = () => game.startGame()
 
   renderGame()
+  view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
 
-  return { renderGame }
+  return { renderGame, startGame }
 }
 
 init()
