@@ -9,10 +9,14 @@ const Game = () => {
   const playerBoard = Gameboard()
   const computerBoard = Gameboard()
 
-  playerBoard.autoPlaceFleet()
   computerBoard.autoPlaceFleet()
 
   const gameOver = () => (playerBoard.allShipsSunk() || computerBoard.allShipsSunk() ? true : false)
+
+  const placePlayerFleet = () => {
+    playerBoard.autoPlaceFleet()
+    return playerBoard
+  }
 
   const declareWinner = () => {
     if (playerBoard.allShipsSunk()) {
@@ -46,7 +50,7 @@ const Game = () => {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve(computer.autoAttack(playerBoard))
-        }, 1000)
+        }, 300)
       })
     }
   }
@@ -57,6 +61,7 @@ const Game = () => {
     playerTurn,
     playerBoard,
     computerBoard,
+    placePlayerFleet,
     gameOver,
     startGame,
     nextTurn,

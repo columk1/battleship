@@ -8,6 +8,7 @@ function init() {
 const View = () => {
   const board1 = document.getElementById('board1')
   const board2 = document.getElementById('board2')
+  const gameOptions = document.getElementById('game-options')
 
   const renderCell = (x, y, state) => {
     const cell = document.createElement('div')
@@ -31,9 +32,14 @@ const View = () => {
     return grid
   }
 
-  const renderBoard2 = (gameboard) => {
+  const renderBoard1 = (playerBoard) => {
+    board1.innerHTML = ''
+    board1.appendChild(renderGrid(playerBoard))
+  }
+
+  const renderBoard2 = (computerBoard) => {
     board2.innerHTML = ''
-    board2.appendChild(renderGrid(gameboard))
+    board2.appendChild(renderGrid(computerBoard))
   }
 
   const renderBoards = (gameboard1, gameboard2) => {
@@ -43,6 +49,7 @@ const View = () => {
     board2.appendChild(renderGrid(gameboard2))
   }
 
+  // ** Refactor this. Render one board at a time. Separate click handler **
   // callback is the game.nextTurn function passed in by the Controller
   const addGridListeners = (gameboard1, gameboard2, callback) => {
     // Add listeners to computer's board
@@ -61,14 +68,29 @@ const View = () => {
       })
     })
   }
-  return { renderBoards, addGridListeners }
+
+  const bindAutoPlaceShips = (handler) => {
+    const placeShipsBtn = document.getElementById('place-ships-btn')
+    placeShipsBtn.addEventListener('click', () => {
+      renderBoard1(handler())
+    })
+  }
+
+  // ** Start Game Listener **
+  //   gameOptions.classList.toggle('hidden')
+  //   board2.classList.toggle('hidden')
+
+  return { renderBoards, addGridListeners, bindAutoPlaceShips }
 }
 
 const Controller = (game, view) => {
+  const placeShips = () => game.placeFleet(game.playerBoard)
   const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
+  const bindAutoPlaceShips = () => view.bindAutoPlaceShips(game.placePlayerFleet)
   const startGame = () => game.startGame()
 
   renderGame()
+  bindAutoPlaceShips()
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
 
   return { renderGame, startGame }

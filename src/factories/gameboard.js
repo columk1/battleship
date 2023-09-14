@@ -14,6 +14,10 @@ const Gameboard = () => {
   const getBoard = () => board
   const getShips = () => ships
 
+  const resetBoard = () => {
+    board = board.map((row) => row.map((cell) => (cell = null)))
+    ships.length = 0
+  }
   const placeShip = (ship, x, y, isVertical) => {
     if (!isValidPlacement(ship, x, y, isVertical)) return 0
 
@@ -37,6 +41,7 @@ const Gameboard = () => {
   }
 
   const autoPlaceFleet = (fleet) => {
+    resetBoard()
     SHIP_LENGTHS.forEach((length) => autoPlaceShip(Ship(length)))
   }
 

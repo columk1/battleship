@@ -41,10 +41,25 @@ header {
   gap: 1rem;
 }
 
+.game-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+}
+
+#place-ships-btn {
+  margin: 2rem 0;
+}
+
 .board {
   width: 30vw;
   height: 30vw;
   background-color: whitesmoke;
+}
+
+#board2 {
+  position: absolute;
 }
 
 .grid {
@@ -79,6 +94,10 @@ header {
 .label {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 form {
