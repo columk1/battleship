@@ -10,6 +10,10 @@ html {
   color: #444;
 }
 
+body {
+  background-color: white;
+}
+
 #root {
   max-width: 450px;
   margin: 2rem auto;
@@ -40,7 +44,32 @@ header {
 .board {
   width: 30vw;
   height: 30vw;
+  background-color: whitesmoke;
+}
+
+.grid {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 0.2rem;
+}
+
+.cell {
+  border: 1px solid black;
+}
+
+.hit {
+  background-color: red;
+}
+
+.miss {
   background-color: grey;
+}
+
+.ship {
+  background-color: blue;
 }
 
 .label {
