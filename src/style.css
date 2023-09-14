@@ -48,8 +48,12 @@ header {
   justify-content: end;
 }
 
-#place-ships-btn {
-  margin: 2rem 0;
+.btn {
+  margin-bottom: 1rem;
+}
+
+#start-btn {
+  width: 90%;
 }
 
 .board {
@@ -83,7 +87,7 @@ header {
   background-color: grey;
 }
 
-.ship {
+#board1 .ship {
   background-color: blue;
 }
 

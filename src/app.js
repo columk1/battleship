@@ -9,6 +9,8 @@ const View = () => {
   const board1 = document.getElementById('board1')
   const board2 = document.getElementById('board2')
   const gameOptions = document.getElementById('game-options')
+  const placeShipsBtn = document.getElementById('place-ships-btn')
+  const startButton = document.getElementById('start-btn')
 
   const renderCell = (x, y, state) => {
     const cell = document.createElement('div')
@@ -70,15 +72,17 @@ const View = () => {
   }
 
   const bindAutoPlaceShips = (handler) => {
-    const placeShipsBtn = document.getElementById('place-ships-btn')
     placeShipsBtn.addEventListener('click', () => {
       renderBoard1(handler())
+      startButton.classList.remove('hidden')
     })
   }
 
   // ** Start Game Listener **
-  //   gameOptions.classList.toggle('hidden')
-  //   board2.classList.toggle('hidden')
+  startButton.addEventListener('click', () => {
+    gameOptions.classList.toggle('hidden')
+    board2.classList.toggle('hidden')
+  })
 
   return { renderBoards, addGridListeners, bindAutoPlaceShips }
 }

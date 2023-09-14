@@ -6,7 +6,7 @@ describe('Player actions in game', () => {
   const player = Player()
 
   test('When a player attacks the enemies board', () => {
-    expect(player.attack(0, 0, board)).toBe('miss')
+    expect(player.attack(0, 0, board).state).toBe('miss')
   })
 
   test('When a player autoAttacks the enemies board', () => {

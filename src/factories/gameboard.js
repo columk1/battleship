@@ -69,22 +69,35 @@ const Gameboard = () => {
     return true
   }
 
+  const validTarget = ([x, y]) => x >= 0 && x < SIZE && y >= 0 && y < SIZE
+
   const getCell = (x, y) => (x < SIZE || y < SIZE ? undefined : board[x][y])
+
+  const getAdjacentCells = (x, y) => {
+    const adjacentCells = [
+      [x, y + 1],
+      [x + 1, y],
+      [x, y - 1],
+      [x - 1, y],
+    ]
+    adjacentCells.map((cell) => {})
+    return adjacentCells.filter((cell) => validTarget(cell))
+  }
 
   const receiveAttack = (x, y) => {
     let target = board[x][y]
     if (target === null) {
       board[x][y] = 'miss'
-      return board[x][y]
+      return { state: board[x][y] }
       // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()
       board[x][y] = 'hit'
+      return { state: board[x][y], isSunk: target.isSunk() }
     }
-    return board[x][y]
   }
 
-  const allShipsSunk = () => ships.every((ship) => ship.isSunk())
+  const allShipsSunk = () => ships.length > 0 && ships.every((ship) => ship.isSunk())
 
   return {
     getBoard,
@@ -92,6 +105,7 @@ const Gameboard = () => {
     placeShip,
     autoPlaceShip,
     autoPlaceFleet,
+    getAdjacentCells,
     receiveAttack,
     allShipsSunk,
   }

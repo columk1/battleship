@@ -1,7 +1,8 @@
-import { randomCoordinates } from './helpers/helpers.js'
+import { randomCoordinates, randomCoordinatesParity } from './helpers/helpers.js'
 
 const Player = () => {
   const attack = (x, y, enemyBoard) => enemyBoard.receiveAttack(x, y)
+  let possibleAttacks = []
 
   // const attack = (x, y, enemyBoard) => {
   //   const targetCell = enemyBoard.getBoard()[x][y]
@@ -13,12 +14,22 @@ const Player = () => {
   // }
 
   const autoAttack = (enemyBoard) => {
-    const [x, y] = randomCoordinates()
+    let [x, y] = randomCoordinatesParity()
+    if (possibleAttacks.length > 0) {
+      ;[x, y] = possibleAttacks.pop()
+    }
     const targetCell = enemyBoard.getBoard()[x][y]
     if (targetCell === 'miss' || targetCell === 'hit') {
       autoAttack(enemyBoard)
     } else {
-      return enemyBoard.receiveAttack(x, y)
+      let attackResult = enemyBoard.receiveAttack(x, y)
+      if (attackResult.state === 'hit') {
+        if (!attackResult.isSunk) {
+          possibleAttacks = [...possibleAttacks, ...enemyBoard.getAdjacentCells(x, y)]
+          console.log(possibleAttacks)
+        }
+      }
+      return attackResult.state
     }
   }
 
