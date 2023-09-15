@@ -1,9 +1,15 @@
-import './style.css'
+let SIZE = 10
 
-import Game from './factories/game.js'
+let board = Array(SIZE)
+  .fill(null)
+  .map(() => Array(SIZE).fill(null))
 
-const game = Game()
+getEveryThirdCell = () => {
+  let allCoords = []
+  board.map((row, i) => row.map((cell, index) => allCoords.push([i, index])))
+  let result = allCoords.filter((coord, index) => index % 3 === 0)
+  let random = Math.floor(Math.random() * result.length)
+  return result[random]
+}
 
-console.log(game.playerBoard.getBoard())
-
-// game.startGame()
+console.log(getEveryThirdCell())
