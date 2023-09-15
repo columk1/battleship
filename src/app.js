@@ -9,6 +9,7 @@ const View = () => {
   const board1 = document.getElementById('board1')
   const board2 = document.getElementById('board2')
   const gameOptions = document.getElementById('game-options')
+  const fleetContainer = document.querySelector('.fleet-container')
   const placeShipsBtn = document.getElementById('place-ships-btn')
   const startButton = document.getElementById('start-btn')
 
@@ -78,13 +79,84 @@ const View = () => {
     })
   }
 
+  const renderFleet = (fleet) => {
+    fleet.forEach((shipLength, index) => {
+      const container = document.createElement('div')
+      container.classList.add('ship', 'ship-' + index)
+      container.setAttribute('draggable', true)
+      container.dataset.ship = shipLength
+      for (let i = 0; i < shipLength; i++) {
+        const cell = document.createElement('div')
+        cell.classList.add('ship-cell')
+        cell.dataset.index = i
+        container.appendChild(cell)
+      }
+      fleetContainer.appendChild(container)
+    })
+  }
+
+  // Drag and Drop
+  const Drag = (playerBoard) => {
+    let draggedShip
+    let draggedShipIndex
+
+    const getDraggedShipIndex = (e) => (draggedShipIndex = Number(e.target.dataset.index))
+
+    const dragStart = (e) => {
+      draggedShip = e.target
+    }
+
+    const dragDrop = (e) => {
+      const cell = e.target
+      const ship = { length: Number(draggedShip.dataset.ship) }
+      // const isVertical = ship.isVertical()
+      const isHorizontal = true
+
+      const x = Number(cell.dataset.x) - (isHorizontal ? 0 : draggedShipIndex)
+      const y = Number(cell.dataset.y) - (isHorizontal ? draggedShipIndex : 0)
+
+      const outcome = playerBoard.placeShip(ship, x, y, isHorizontal)
+
+      if (outcome) {
+        // Update grid
+        renderBoard1(playerBoard)
+        addDragAndDropEventListeners()
+        // Remove dragged ship
+        draggedShip.parentElement.removeChild(draggedShip)
+      }
+    }
+
+    const dragOver = (e) => e.preventDefault()
+    const dragEnter = (e) => e.preventDefault()
+    const dragLeave = () => {}
+    const dragEnd = () => {}
+
+    const addDragAndDropEventListeners = () => {
+      const ships = document.querySelectorAll('.ship')
+      const cells = document.querySelectorAll('.cell')
+
+      for (const ship of ships) {
+        ship.addEventListener('mousedown', getDraggedShipIndex)
+        ship.addEventListener('dragstart', dragStart)
+        ship.addEventListener('dragend', dragEnd)
+      }
+      for (const cell of cells) {
+        cell.addEventListener('dragenter', dragEnter)
+        cell.addEventListener('dragover', dragOver)
+        cell.addEventListener('dragleave', dragLeave)
+        cell.addEventListener('drop', dragDrop)
+      }
+    }
+    return { addDragAndDropEventListeners }
+  }
+
   // ** Start Game Listener **
   startButton.addEventListener('click', () => {
     gameOptions.classList.toggle('hidden')
     board2.classList.toggle('hidden')
   })
 
-  return { renderBoards, addGridListeners, bindAutoPlaceShips }
+  return { renderBoards, addGridListeners, bindAutoPlaceShips, renderFleet, Drag }
 }
 
 const Controller = (game, view) => {
@@ -92,9 +164,12 @@ const Controller = (game, view) => {
   const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
   const bindAutoPlaceShips = () => view.bindAutoPlaceShips(game.placePlayerFleet)
   const startGame = () => game.startGame()
+  const drag = view.Drag(game.playerBoard)
 
   renderGame()
   bindAutoPlaceShips()
+  view.renderFleet(game.playerBoard.getShipLengths())
+  drag.addDragAndDropEventListeners()
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
 
   return { renderGame, startGame }

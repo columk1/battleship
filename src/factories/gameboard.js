@@ -13,6 +13,7 @@ const Gameboard = () => {
 
   const getBoard = () => board
   const getShips = () => ships
+  const getShipLengths = () => SHIP_LENGTHS
 
   const resetBoard = () => {
     board = board.map((row) => row.map((cell) => (cell = null)))
@@ -110,6 +111,7 @@ const Gameboard = () => {
   return {
     getBoard,
     getShips,
+    getShipLengths,
     placeShip,
     autoPlaceShip,
     autoPlaceFleet,
