@@ -79,6 +79,14 @@ const View = () => {
     })
   }
 
+  const addRotateListener = () => {
+    const rotateBtn = document.getElementById('rotate-btn')
+    const currentShip = document.querySelector('.fleet-container .ship')
+    rotateBtn.addEventListener('click', () => {
+      currentShip.classList.toggle('vertical')
+    })
+  }
+
   const renderFleet = (fleet) => {
     fleet.forEach((ship, index) => {
       const container = document.createElement('div')
@@ -87,6 +95,7 @@ const View = () => {
       container.setAttribute('draggable', true)
       container.dataset.type = ship.type
       container.dataset.length = ship.length
+      container.dataset.orientation = 'horizontal'
       for (let i = 0; i < ship.length; i++) {
         const cell = document.createElement('div')
         cell.classList.add('ship-cell')
@@ -94,13 +103,6 @@ const View = () => {
         container.appendChild(cell)
       }
       fleetContainer.appendChild(container)
-    })
-  }
-
-  const addRotateEventListeners = () => {
-    const ships = document.querySelectorAll('.ship')
-    ships.forEach((ship) => {
-      ship.addEventListener('')
     })
   }
 
@@ -120,7 +122,7 @@ const View = () => {
       const ship = playerBoard.getFleet()[Number(draggedShip.id.slice(-1))]
       // const isVertical = ship.isVertical()
       // const isHorizontal = !ship.isVertical()
-      const isHorizontal = true
+      const isHorizontal = !draggedShip.classList.contains('vertical')
 
       const x = Number(cell.dataset.x) - (isHorizontal ? 0 : draggedShipIndex)
       const y = Number(cell.dataset.y) - (isHorizontal ? draggedShipIndex : 0)
@@ -132,7 +134,11 @@ const View = () => {
         renderBoard1(playerBoard)
         addDragAndDropEventListeners()
         // Remove dragged ship
-        draggedShip.parentElement.removeChild(draggedShip)
+        const parent = draggedShip.parentElement
+        parent.removeChild(draggedShip)
+        const nextShip = parent.firstChild
+        if (nextShip) nextShip.setAttribute('style', 'display: flex')
+        addRotateListener()
       }
     }
 
@@ -166,7 +172,14 @@ const View = () => {
     board2.classList.toggle('hidden')
   })
 
-  return { renderBoards, addGridListeners, bindAutoPlaceShips, renderFleet, Drag }
+  return {
+    renderBoards,
+    addGridListeners,
+    bindAutoPlaceShips,
+    renderFleet,
+    addRotateListener,
+    Drag,
+  }
 }
 
 const Controller = (game, view) => {
@@ -181,6 +194,7 @@ const Controller = (game, view) => {
   view.renderFleet(game.playerBoard.getShipTypes())
   drag.addDragAndDropEventListeners()
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
+  view.addRotateListener()
 
   return { renderGame, startGame }
 }

@@ -43,7 +43,6 @@ const Gameboard = () => {
         board[x + i][y] = ship
       }
     }
-    console.log(ship)
     return ships.push(ship)
   }
 
