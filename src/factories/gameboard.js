@@ -3,7 +3,16 @@ import Ship from './ship.js'
 
 const Gameboard = () => {
   const SIZE = 10
-  const SHIP_LENGTHS = [5, 4, 3, 3, 2]
+  const SHIP_TYPES = [
+    { type: 'Carrier', length: 5 },
+    { type: 'Battleship', length: 4 },
+    { type: 'Cruiser', length: 3 },
+    { type: 'Submarine', length: 3 },
+    { type: 'Destroyer', length: 2 },
+  ]
+  // const SHIP_LENGTHS = [5, 4, 3, 3, 2]
+  const fleet = SHIP_TYPES.map((ship) => Ship(ship.type, ship.length))
+  // Rename this to placedShips
   const ships = []
 
   // Create a grid
@@ -12,8 +21,11 @@ const Gameboard = () => {
     .map(() => Array(SIZE).fill(null))
 
   const getBoard = () => board
+  const getFleet = () => fleet
   const getShips = () => ships
   const getShipLengths = () => SHIP_LENGTHS
+  const getShipTypes = () => SHIP_TYPES
+  const createShip = (type, length) => Ship(type, length)
 
   const resetBoard = () => {
     board = board.map((row) => row.map((cell) => (cell = null)))
@@ -31,6 +43,7 @@ const Gameboard = () => {
         board[x + i][y] = ship
       }
     }
+    console.log(ship)
     return ships.push(ship)
   }
 
@@ -43,7 +56,7 @@ const Gameboard = () => {
 
   const autoPlaceFleet = (fleet) => {
     resetBoard()
-    SHIP_LENGTHS.forEach((length) => autoPlaceShip(Ship(length)))
+    SHIP_TYPES.forEach((ship) => autoPlaceShip(Ship(ship.type, ship.length)))
   }
 
   const isValidPlacement = (ship, x, y, isVertical) => {
@@ -110,8 +123,11 @@ const Gameboard = () => {
 
   return {
     getBoard,
+    getFleet,
     getShips,
     getShipLengths,
+    getShipTypes,
+    createShip,
     placeShip,
     autoPlaceShip,
     autoPlaceFleet,

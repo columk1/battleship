@@ -1,7 +1,7 @@
 import Ship from './ship'
 
 describe('Ship', () => {
-  const ship = Ship(3)
+  const ship = Ship('Submarine', 3)
   test('When ship is hit', () => {
     ship.hit()
     expect(ship.getHits()).toBe(1)

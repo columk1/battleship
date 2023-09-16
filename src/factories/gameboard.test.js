@@ -3,7 +3,7 @@ import Ship from './ship'
 
 describe('Ships placed manually', () => {
   const board = Gameboard()
-  const ship = Ship(3)
+  const ship = Ship('Submarine', 3)
 
   describe('Place a ship', () => {
     test('When board is initialized', () => {

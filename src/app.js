@@ -80,18 +80,27 @@ const View = () => {
   }
 
   const renderFleet = (fleet) => {
-    fleet.forEach((shipLength, index) => {
+    fleet.forEach((ship, index) => {
       const container = document.createElement('div')
-      container.classList.add('ship', 'ship-' + index)
+      container.classList.add('ship')
+      container.setAttribute('id', 'ship-' + index)
       container.setAttribute('draggable', true)
-      container.dataset.ship = shipLength
-      for (let i = 0; i < shipLength; i++) {
+      container.dataset.type = ship.type
+      container.dataset.length = ship.length
+      for (let i = 0; i < ship.length; i++) {
         const cell = document.createElement('div')
         cell.classList.add('ship-cell')
         cell.dataset.index = i
         container.appendChild(cell)
       }
       fleetContainer.appendChild(container)
+    })
+  }
+
+  const addRotateEventListeners = () => {
+    const ships = document.querySelectorAll('.ship')
+    ships.forEach((ship) => {
+      ship.addEventListener('')
     })
   }
 
@@ -108,8 +117,9 @@ const View = () => {
 
     const dragDrop = (e) => {
       const cell = e.target
-      const ship = { length: Number(draggedShip.dataset.ship) }
+      const ship = playerBoard.getFleet()[Number(draggedShip.id.slice(-1))]
       // const isVertical = ship.isVertical()
+      // const isHorizontal = !ship.isVertical()
       const isHorizontal = true
 
       const x = Number(cell.dataset.x) - (isHorizontal ? 0 : draggedShipIndex)
@@ -168,7 +178,7 @@ const Controller = (game, view) => {
 
   renderGame()
   bindAutoPlaceShips()
-  view.renderFleet(game.playerBoard.getShipLengths())
+  view.renderFleet(game.playerBoard.getShipTypes())
   drag.addDragAndDropEventListeners()
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
 
