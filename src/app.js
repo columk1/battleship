@@ -10,6 +10,7 @@ const View = () => {
   const board2 = document.getElementById('board2')
   const gameOptions = document.getElementById('game-options')
   const fleetContainer = document.querySelector('.fleet-container')
+  const rotateBtn = document.getElementById('rotate-btn')
   const placeShipsBtn = document.getElementById('place-ships-btn')
   const startButton = document.getElementById('start-btn')
 
@@ -72,15 +73,14 @@ const View = () => {
     })
   }
 
-  const bindAutoPlaceShips = (handler) => {
+  const autoPlaceShips = (fn) => {
     placeShipsBtn.addEventListener('click', () => {
-      renderBoard1(handler())
+      renderBoard1(fn())
       startButton.classList.remove('hidden')
     })
   }
 
   const addRotateListener = () => {
-    const rotateBtn = document.getElementById('rotate-btn')
     const currentShip = document.querySelector('.fleet-container .ship')
     rotateBtn.addEventListener('click', () => {
       currentShip.classList.toggle('vertical')
@@ -106,8 +106,8 @@ const View = () => {
     })
   }
 
-  // Drag and Drop
-  const Drag = (playerBoard) => {
+  // Initialize Drag and Drop Event Listeners
+  const initDragAndDrop = (playerBoard) => {
     let draggedShip
     let draggedShipIndex
 
@@ -137,8 +137,14 @@ const View = () => {
         const parent = draggedShip.parentElement
         parent.removeChild(draggedShip)
         const nextShip = parent.firstChild
-        if (nextShip) nextShip.setAttribute('style', 'display: flex')
-        addRotateListener()
+        if (nextShip) {
+          nextShip.setAttribute('style', 'display: flex')
+          addRotateListener()
+        } else {
+          rotateBtn.classList.add('hidden')
+          placeShipsBtn.classList.add('hidden')
+          startButton.classList.remove('hidden')
+        }
       }
     }
 
@@ -163,7 +169,7 @@ const View = () => {
         cell.addEventListener('drop', dragDrop)
       }
     }
-    return { addDragAndDropEventListeners }
+    addDragAndDropEventListeners()
   }
 
   // ** Start Game Listener **
@@ -175,24 +181,24 @@ const View = () => {
   return {
     renderBoards,
     addGridListeners,
-    bindAutoPlaceShips,
+    autoPlaceShips,
     renderFleet,
     addRotateListener,
-    Drag,
+    initDragAndDrop,
   }
 }
 
 const Controller = (game, view) => {
   const placeShips = () => game.placeFleet(game.playerBoard)
   const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
-  const bindAutoPlaceShips = () => view.bindAutoPlaceShips(game.placePlayerFleet)
+  const autoPlaceShips = () => view.autoPlaceShips(game.placePlayerFleet)
   const startGame = () => game.startGame()
-  const drag = view.Drag(game.playerBoard)
+  // const drag = view.Drag(game.playerBoard)
 
   renderGame()
-  bindAutoPlaceShips()
+  autoPlaceShips()
   view.renderFleet(game.playerBoard.getShipTypes())
-  drag.addDragAndDropEventListeners()
+  view.initDragAndDrop(game.playerBoard)
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
   view.addRotateListener()
 
