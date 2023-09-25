@@ -12,10 +12,11 @@
     <main>
       <div class="game-container">
         <div class="board-container">
+          <div class="label hidden">Player</div>
           <div class="board" id="board1"></div>
-          <div class="label">Player</div>
         </div>
         <div class="board-container">
+          <div class="label hidden">Computer</div>
           <div class="board game-options" id="game-options">
             <div class="fleet-container"></div>
             <div class="buttons">
@@ -24,8 +25,10 @@
               <button class="btn hidden" id="start-btn">Start Game</button>
             </div>
           </div>
-          <div class="board hidden" id="board2"></div>
-          <div class="label">Computer</div>
+          <div class="board inactive" id="board2"></div>
+        </div>
+        <div class="status-container">
+          <div class="status">[Player's Turn]</div>
         </div>
       </div>
     </main>

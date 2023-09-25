@@ -8,6 +8,7 @@ function init() {
 const View = () => {
   const board1 = document.getElementById('board1')
   const board2 = document.getElementById('board2')
+  const labels = document.querySelectorAll('.label')
   const gameOptions = document.getElementById('game-options')
   const fleetContainer = document.querySelector('.fleet-container')
   const rotateBtn = document.getElementById('rotate-btn')
@@ -174,8 +175,9 @@ const View = () => {
 
   // ** Start Game Listener **
   startButton.addEventListener('click', () => {
-    gameOptions.classList.toggle('hidden')
-    board2.classList.toggle('hidden')
+    gameOptions.classList.toggle('inactive')
+    board2.classList.remove('inactive')
+    labels.forEach((label) => label.classList.remove('hidden'))
   })
 
   return {
