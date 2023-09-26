@@ -111,13 +111,13 @@ const Gameboard = () => {
     let target = board[x][y]
     if (target === null) {
       board[x][y] = 'miss'
-      statusMessage = `[Player's Turn]`
+      statusMessage = `[ Player's Turn ]`
       return { state: board[x][y] }
       // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()
       board[x][y] = 'hit'
-      statusMessage = `[Player's Turn]`
+      statusMessage = `[ Player's Turn ]`
       if (target.isSunk()) statusMessage = `You sunk the enemy's ${target.type}!`
       return { state: board[x][y], isSunk: target.isSunk() }
     }

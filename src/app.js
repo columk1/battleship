@@ -66,7 +66,7 @@ const View = () => {
         const x = e.target.dataset.x
         const y = e.target.dataset.y
         gameboard2.receiveAttack(x, y)
-        updateStatus(gameboard2.getStatusMessage())
+        updateTurnStatus(gameboard2.getStatusMessage())
         renderBoards(gameboard1, gameboard2)
         checkGameStatus(gameboard1, gameboard2)
         // Process computer's turn and wait for timeout to complete before re-rendering
@@ -116,15 +116,17 @@ const View = () => {
     status.innerHTML = '...'
     setTimeout(() => {
       status.textContent = message
+    }, 200)
+  }
+
+  const updateTurnStatus = (message) => {
+    status.innerHTML = '...'
+    setTimeout(() => {
+      status.textContent = message
     }, 400)
   }
 
-  const updateDragStatus = () => {
-    const currentShip = document.querySelector('.fleet-container .ship')
-    if (currentShip) status.textContent = `Place your ${fleetContainer.firstChild.dataset.type}`
-  }
-
-  const isGameOver = () => playerBoard.allShipsSunk() || computerBoard.allShipsSunk()
+  // const isGameOver = () => playerBoard.allShipsSunk() || computerBoard.allShipsSunk()
 
   const checkGameStatus = (playerBoard, computerBoard) => {
     if (playerBoard.allShipsSunk()) {
@@ -172,7 +174,7 @@ const View = () => {
         if (nextShip) {
           nextShip.setAttribute('style', 'display: flex')
           addRotateListener()
-          updateDragStatus()
+          updateStatus(`Place your ${fleetContainer.firstChild.dataset.type}`)
         } else {
           rotateBtn.disabled = true
           // placeShipsBtn.classList.add('hidden')
@@ -204,7 +206,7 @@ const View = () => {
       }
     }
     addDragAndDropEventListeners()
-    updateDragStatus()
+    updateStatus(`Place your ${fleetContainer.firstChild.dataset.type}`)
   }
 
   // ** Start Game Listener **
