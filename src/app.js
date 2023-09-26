@@ -14,6 +14,7 @@ const View = () => {
   const rotateBtn = document.getElementById('rotate-btn')
   const placeShipsBtn = document.getElementById('place-ships-btn')
   const startButton = document.getElementById('start-btn')
+  const status = document.getElementById('status')
 
   const renderCell = (x, y, state) => {
     const cell = document.createElement('div')
@@ -78,6 +79,7 @@ const View = () => {
     placeShipsBtn.addEventListener('click', () => {
       renderBoard1(fn())
       startButton.classList.remove('hidden')
+      updateStatus('All ships in position')
     })
   }
 
@@ -105,6 +107,18 @@ const View = () => {
       }
       fleetContainer.appendChild(container)
     })
+  }
+
+  const updateStatus = (message) => {
+    status.innerHTML = '...'
+    setTimeout(() => {
+      status.textContent = message
+    }, 300)
+  }
+
+  const updateDragStatus = () => {
+    const currentShip = document.querySelector('.fleet-container .ship')
+    if (currentShip) status.textContent = `Place your ${fleetContainer.firstChild.dataset.type}`
   }
 
   // Initialize Drag and Drop Event Listeners
@@ -141,10 +155,12 @@ const View = () => {
         if (nextShip) {
           nextShip.setAttribute('style', 'display: flex')
           addRotateListener()
+          updateDragStatus()
         } else {
-          rotateBtn.classList.add('hidden')
-          placeShipsBtn.classList.add('hidden')
+          rotateBtn.disabled = true
+          // placeShipsBtn.classList.add('hidden')
           startButton.classList.remove('hidden')
+          updateStatus('All ships in position')
         }
       }
     }
@@ -171,6 +187,7 @@ const View = () => {
       }
     }
     addDragAndDropEventListeners()
+    updateDragStatus()
   }
 
   // ** Start Game Listener **
