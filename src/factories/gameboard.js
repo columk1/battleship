@@ -14,6 +14,7 @@ const Gameboard = () => {
   const fleet = SHIP_TYPES.map((ship) => Ship(ship.type, ship.length))
   // Rename this to placedShips
   const ships = []
+  let statusMessage = ''
 
   // Create a grid
   let board = Array(SIZE)
@@ -23,6 +24,7 @@ const Gameboard = () => {
   const getBoard = () => board
   const getFleet = () => fleet
   const getShips = () => ships
+  const getStatusMessage = () => statusMessage
   const getShipLengths = () => SHIP_LENGTHS
   const getShipTypes = () => SHIP_TYPES
   const createShip = (type, length) => Ship(type, length)
@@ -109,11 +111,14 @@ const Gameboard = () => {
     let target = board[x][y]
     if (target === null) {
       board[x][y] = 'miss'
+      statusMessage = `[Player's Turn]`
       return { state: board[x][y] }
       // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()
       board[x][y] = 'hit'
+      statusMessage = `[Player's Turn]`
+      if (target.isSunk()) statusMessage = `You sunk the enemy's ${target.type}!`
       return { state: board[x][y], isSunk: target.isSunk() }
     }
   }
@@ -124,6 +129,7 @@ const Gameboard = () => {
     getBoard,
     getFleet,
     getShips,
+    getStatusMessage,
     getShipLengths,
     getShipTypes,
     createShip,

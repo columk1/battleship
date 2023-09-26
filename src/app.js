@@ -66,10 +66,13 @@ const View = () => {
         const x = e.target.dataset.x
         const y = e.target.dataset.y
         gameboard2.receiveAttack(x, y)
+        updateStatus(gameboard2.getStatusMessage())
         renderBoards(gameboard1, gameboard2)
+        checkGameStatus(gameboard1, gameboard2)
         // Process computer's turn and wait for timeout to complete before re-rendering
         await callback()
         renderBoards(gameboard1, gameboard2)
+        checkGameStatus(gameboard1, gameboard2)
         addGridListeners(gameboard1, gameboard2, callback)
       })
     })
@@ -113,12 +116,26 @@ const View = () => {
     status.innerHTML = '...'
     setTimeout(() => {
       status.textContent = message
-    }, 300)
+    }, 400)
   }
 
   const updateDragStatus = () => {
     const currentShip = document.querySelector('.fleet-container .ship')
     if (currentShip) status.textContent = `Place your ${fleetContainer.firstChild.dataset.type}`
+  }
+
+  const isGameOver = () => playerBoard.allShipsSunk() || computerBoard.allShipsSunk()
+
+  const checkGameStatus = (playerBoard, computerBoard) => {
+    if (playerBoard.allShipsSunk()) {
+      updateStatus(`Computer wins!`)
+      return true
+    }
+    if (computerBoard.allShipsSunk()) {
+      updateStatus(`Player wins!`)
+      return true
+    }
+    return false
   }
 
   // Initialize Drag and Drop Event Listeners
@@ -195,6 +212,7 @@ const View = () => {
     gameOptions.classList.toggle('inactive')
     board2.classList.remove('inactive')
     labels.forEach((label) => label.classList.remove('hidden'))
+    updateStatus(`Click a cell on the enemy's board to place your first attack.`)
   })
 
   return {
