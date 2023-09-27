@@ -1,3 +1,15 @@
+:root {
+  --bg: #151521;
+  --main-bg: rgb(14, 38, 64);
+  --button: rgb(1, 152, 190);
+  --button-text: rgb(226, 250, 252);
+  --teal: rgba(0, 251, 255);
+  --teal-light: rgb(167, 241, 241);
+  --ship: rgb(0, 200, 204);
+  --hit: #bf2a48;
+  --miss: #151a21;
+}
+
 *,
 *::before,
 *::after {
@@ -5,13 +17,13 @@
 }
 
 html {
-  font-family: sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
-  color: #444;
+  color: var(--teal-light);
 }
 
 body {
-  background-color: white;
+  background-color: var(--bg);
 }
 
 #root {
@@ -26,6 +38,14 @@ header {
   margin: 2rem 0;
 }
 
+.title {
+  font-size: 3.5rem;
+  font-weight: normal;
+  letter-spacing: 0.1rem;
+  margin-bottom: 0;
+  color: #d0c700;
+}
+
 .game-container {
   margin: 2rem auto;
   width: min(1100px, 100%);
@@ -37,12 +57,14 @@ header {
 
 .status-container {
   width: 50%;
-  height: 2rem;
+  height: 2.4rem;
   grid-column: 1 / 3;
   grid-row: 2 / 3;
   display: grid;
   place-items: center;
-  background-color: lightyellow;
+  border-radius: 5px;
+  background-color: var(--main-bg);
+  color: var(--teal-light);
 }
 
 .board-container {
@@ -50,27 +72,35 @@ header {
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .game-options {
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 3fr 1fr;
+  grid-template-rows: 0.5fr 3fr 1fr;
   place-items: center;
   /* justify-content: end; */
 }
 
 .board.game-options {
-  background-color: white;
+  background-color: var(--main-bg);
+}
+
+.options-title {
+  grid-row: 1/ 2;
+  margin: 2.5rem auto 0;
+  font-weight: 500;
 }
 
 .buttons {
-  grid-row: 2 / 3;
+  grid-row: 3 / 4;
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 
 .btn {
+  font-family: 'Orbitron', sans-serif;
   margin-bottom: 1rem;
 }
 
@@ -86,7 +116,7 @@ header {
 .board {
   width: clamp(350px, 40vw, 500px);
   height: clamp(350px, 40vw, 500px);
-  background-color: whitesmoke;
+  background-color: var(--teal);
   container: board / inline-size;
 }
 
@@ -100,28 +130,30 @@ header {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
-  gap: 0.2rem;
+  gap: 0.05rem;
+  border: 1px solid var(--teal);
 }
 
 .cell {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  background-color: var(--main-bg);
 }
 
 .hit {
-  background-color: red;
+  background-color: var(--hit);
 }
 
 .miss {
-  background-color: grey;
+  background-color: var(--miss);
 }
 
 #board1 .ship {
-  background-color: blue;
+  background-color: var(--ship);
 }
 
 .fleet-container {
   width: 50%;
-  margin: 3rem auto;
+  margin: 2rem auto;
   display: flex;
   gap: 1rem;
   margin-right: auto;
@@ -129,13 +161,21 @@ header {
   flex-wrap: wrap;
   justify-content: center;
   align-items: space-around;
-  grid-row: 1 / 2;
+  grid-row: 2 / 3;
 }
 
 .ship {
   display: flex;
-  gap: 0.2rem;
+  gap: 0.05rem;
   box-shadow: none;
+}
+
+.fleet-container .ship:hover {
+  box-shadow: rgb(0, 188, 179) 0px 0px 10px;
+}
+
+.ship:hover .ship-cell {
+  background: var(--teal);
 }
 
 .vertical {
@@ -168,9 +208,9 @@ header {
 } */
 
 .ship-cell {
-  width: 45px;
-  height: 45px;
-  background-color: lightgray;
+  width: 49px;
+  height: 49px;
+  background-color: var(--ship);
   border: 1px solid black;
 }
 
@@ -220,16 +260,26 @@ button {
   -webkit-appearance: none;
   padding: 0.5rem 1rem;
   font-size: 1rem;
-  border: 2px solid #ccc;
+  border: none;
+  outline: none;
+  /* border: 2px solid #ccc; */
   border-radius: 4px;
 }
 
 button {
   cursor: pointer;
-  background: #007bff;
-  color: white;
-  border: 2px solid #007bff;
+  /* background: #007bff; */
+  background: var(--button);
+  background-color: var(--button);
+  /* background-image: linear-gradient(#37adb2, #329ca0); */
+  color: var(--button-text);
+  /* border: 2px solid #007bff; */
+  /* border: 1px solid rgb(0, 126, 120); */
   margin: 0 0.5rem;
+}
+
+button:hover {
+  outline: 1px solid var(--teal);
 }
 
 [type='text'] {

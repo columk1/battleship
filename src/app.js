@@ -81,6 +81,8 @@ const View = () => {
   const autoPlaceShips = (fn) => {
     placeShipsBtn.addEventListener('click', () => {
       renderBoard1(fn())
+      rotateBtn.disabled = true
+      fleetContainer.classList.add('hidden')
       startButton.classList.remove('hidden')
       updateStatus('All ships in position')
     })
@@ -177,7 +179,6 @@ const View = () => {
           updateStatus(`Place your ${fleetContainer.firstChild.dataset.type}`)
         } else {
           rotateBtn.disabled = true
-          // placeShipsBtn.classList.add('hidden')
           startButton.classList.remove('hidden')
           updateStatus('All ships in position')
         }
@@ -213,6 +214,7 @@ const View = () => {
   startButton.addEventListener('click', () => {
     gameOptions.classList.toggle('inactive')
     board2.classList.remove('inactive')
+    fleetContainer.classList.add('inactive')
     labels.forEach((label) => label.classList.remove('hidden'))
     updateStatus(`Click a cell on the enemy's board to place your first attack.`)
   })
