@@ -15,6 +15,7 @@ const View = () => {
   const placeShipsBtn = document.getElementById('place-ships-btn')
   const startButton = document.getElementById('start-btn')
   const status = document.getElementById('status')
+  const modal = document.querySelector('#gameOverModal')
 
   const renderCell = (x, y, state) => {
     const cell = document.createElement('div')
@@ -132,15 +133,25 @@ const View = () => {
 
   const checkGameStatus = (playerBoard, computerBoard) => {
     if (playerBoard.allShipsSunk()) {
-      updateStatus(`Computer wins!`)
+      endGame('You Lost!')
       return true
     }
     if (computerBoard.allShipsSunk()) {
-      updateStatus(`Player wins!`)
+      endGame('You Won!')
       return true
     }
     return false
   }
+
+  const endGame = (message) => {
+    setTimeout(() => {
+      modal.firstChild.textContent = message
+      modal.classList.add('active')
+      overlay.classList.add('active')
+    }, 1500)
+  }
+
+  const getStatus = () => status.textContent
 
   // Initialize Drag and Drop Event Listeners
   const initDragAndDrop = (playerBoard) => {

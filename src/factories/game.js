@@ -20,9 +20,9 @@ const Game = () => {
 
   const declareWinner = () => {
     if (playerBoard.allShipsSunk()) {
-      alert('Computer wins!')
+      return 'Computer wins!'
     } else if (computerBoard.allShipsSunk()) {
-      alert('Player wins!')
+      return 'Player wins!'
     }
   }
   const startGame = () => {
@@ -37,7 +37,7 @@ const Game = () => {
         // playerTurn = !playerTurn
         setTimeout(() => {
           playerTurn = !playerTurn
-        }, 1000)
+        }, 2000)
       }
     }
     declareWinner()
