@@ -69,9 +69,10 @@ const View = () => {
         computerBoard.receiveAttack(x, y)
         renderBoards(playerBoard, computerBoard)
         checkGameStatus(playerBoard, computerBoard)
+        updateStatus(computerBoard.getStatusMessage())
         // Process computer's turn and wait for timeout to complete before re-rendering
         await callback()
-        updateStatus(computerBoard.getStatusMessage())
+        updateStatus(`[ Player's Turn ]`)
         renderBoards(playerBoard, computerBoard)
         checkGameStatus(playerBoard, computerBoard)
         addGridListeners(playerBoard, computerBoard, callback)
@@ -116,10 +117,13 @@ const View = () => {
   }
 
   const updateStatus = (message) => {
-    status.innerHTML = '...'
-    setTimeout(() => {
+    if (status.textContent.includes('sunk')) {
+      setTimeout(() => {
+        status.textContent = message
+      }, 1000)
+    } else {
       status.textContent = message
-    }, 200)
+    }
   }
 
   // TODO: This logic shouldn't be here, it's already in the controller's Game instance

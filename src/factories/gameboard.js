@@ -107,12 +107,12 @@ const Gameboard = () => {
     let target = board[x][y]
     if (target === null) {
       board[x][y] = 'miss'
-      statusMessage = `[ Player's Turn ]`
+      statusMessage = `[ Miss ]`
       return { state: board[x][y] }
     } else {
       target.hit()
       board[x][y] = 'hit'
-      statusMessage = `[ Player's Turn ]`
+      statusMessage = `[ Hit ]`
       if (target.isSunk()) statusMessage = `You sunk the enemy's ${target.type}!`
       return { state: board[x][y], isSunk: target.isSunk() }
     }
