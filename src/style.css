@@ -23,6 +23,7 @@ html {
 }
 
 body {
+  display: block;
   background-color: var(--bg);
 }
 
