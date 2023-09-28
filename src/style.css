@@ -140,12 +140,26 @@ header {
   background-color: var(--main-bg);
 }
 
+.hit,
+.miss {
+  display: grid;
+  place-items: center;
+  font-family: sans-serif;
+  color: var(--teal-light);
+}
+
 .hit {
   background-color: var(--hit);
 }
+.hit::before {
+  content: '';
+}
 
 .miss {
-  background-color: var(--miss);
+  /* background-color: var(--miss); */
+}
+.miss::before {
+  content: '●';
 }
 
 #board1 .ship {
