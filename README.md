@@ -24,3 +24,4 @@ This project was intended to combine much of what we have learned so far, with a
 - Button to clear board and start over when placing ships
 - Allow users to move ships after they are placed or to undo a placement
 - Improve attack algorithm using heatmaps
+- Touch screen ship placement

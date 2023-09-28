@@ -340,3 +340,19 @@ footer {
     font-size: 0.65rem;
   }
 }
+
+/* Remove manual placement elements for touch devices */
+@media (hover: none) {
+  .fleet-container {
+    display: none;
+  }
+  #rotate-btn {
+    display: none;
+  }
+  .buttons {
+    width: 60%;
+  }
+  #place-ships-btn {
+    grid-column: 1 / 3;
+  }
+}
