@@ -18,6 +18,7 @@ const Game = () => {
     return playerBoard
   }
 
+  // TODO: This function call should trigger a method in the Controller to call view.endGame()
   const declareWinner = () => {
     if (playerBoard.allShipsSunk()) {
       return 'Computer wins!'
@@ -25,6 +26,8 @@ const Game = () => {
       return 'Player wins!'
     }
   }
+
+  // Used for testing game loop only
   const startGame = () => {
     while (!gameOver()) {
       if (!playerTurn) {
@@ -56,14 +59,10 @@ const Game = () => {
   }
 
   return {
-    player,
-    computer,
-    playerTurn,
     playerBoard,
     computerBoard,
     placePlayerFleet,
     gameOver,
-    startGame,
     nextTurn,
   }
 }

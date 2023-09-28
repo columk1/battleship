@@ -5,15 +5,6 @@ const Player = () => {
   let possibleAttacks = []
   let shipsSunk = []
 
-  // const attack = (x, y, enemyBoard) => {
-  //   const targetCell = enemyBoard.getBoard()[x][y]
-  //   if (targetCell === 'miss' || targetCell === 'hit') {
-  //     return false
-  //   } else {
-  //     enemyBoard.receiveAttack(x, y)
-  //   }
-  // }
-
   const autoAttack = (enemyBoard) => {
     let [x, y] = randomCoordinatesParity()
 
@@ -36,6 +27,7 @@ const Player = () => {
     }
   }
 
+  // TODO: Parity calc for attack algorithm.
   const getParity = () => (shipsSunk.some((ship) => ship.length === 2) ? 2 : 3)
 
   return { attack, autoAttack }

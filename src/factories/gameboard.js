@@ -10,10 +10,9 @@ const Gameboard = () => {
     { type: 'Submarine', length: 3 },
     { type: 'Destroyer', length: 2 },
   ]
-  // const SHIP_LENGTHS = [5, 4, 3, 3, 2]
+
   const fleet = SHIP_TYPES.map((ship) => Ship(ship.type, ship.length))
-  // Rename this to placedShips
-  const ships = []
+  const placedShips = []
   let statusMessage = ''
 
   // Create a grid
@@ -23,15 +22,13 @@ const Gameboard = () => {
 
   const getBoard = () => board
   const getFleet = () => fleet
-  const getShips = () => ships
+  const getplacedShips = () => placedShips
   const getStatusMessage = () => statusMessage
-  const getShipLengths = () => SHIP_LENGTHS
   const getShipTypes = () => SHIP_TYPES
-  const createShip = (type, length) => Ship(type, length)
 
   const resetBoard = () => {
     board = board.map((row) => row.map((cell) => (cell = null)))
-    ships.length = 0
+    placedShips.length = 0
   }
   const placeShip = (ship, x, y, isVertical) => {
     if (!isValidPlacement(ship, x, y, isVertical)) return 0
@@ -45,7 +42,7 @@ const Gameboard = () => {
         board[x + i][y] = ship
       }
     }
-    return ships.push(ship)
+    return placedShips.push(ship)
   }
 
   const autoPlaceShip = (ship) => {
@@ -55,9 +52,9 @@ const Gameboard = () => {
     if (!isPlaced) autoPlaceShip(ship)
   }
 
-  const autoPlaceFleet = (fleet) => {
+  const autoPlaceFleet = () => {
     resetBoard()
-    SHIP_TYPES.forEach((ship) => autoPlaceShip(Ship(ship.type, ship.length)))
+    fleet.forEach((ship) => autoPlaceShip(ship))
   }
 
   const isValidPlacement = (ship, x, y, isVertical) => {
@@ -86,8 +83,6 @@ const Gameboard = () => {
 
   const validTarget = ([x, y]) => x >= 0 && x < SIZE && y >= 0 && y < SIZE
 
-  const getCell = (x, y) => (x < SIZE || y < SIZE ? undefined : board[x][y])
-
   const getAdjacentCells = (x, y) => {
     const adjacentCells = [
       [x, y + 1],
@@ -99,6 +94,7 @@ const Gameboard = () => {
     return adjacentCells.filter((cell) => validTarget(cell))
   }
 
+  // ? Potentially useful for a better auto-attack algorithm
   const getAdjacentHorizontalCells = (x, y) => {
     const adjacentCells = [
       [x + 1, y],
@@ -113,7 +109,6 @@ const Gameboard = () => {
       board[x][y] = 'miss'
       statusMessage = `[ Player's Turn ]`
       return { state: board[x][y] }
-      // if (!misses.some((e) => e.x == x && e.y == y)) misses.push({ x, y })
     } else {
       target.hit()
       board[x][y] = 'hit'
@@ -123,21 +118,17 @@ const Gameboard = () => {
     }
   }
 
-  const allShipsSunk = () => ships.length > 0 && ships.every((ship) => ship.isSunk())
+  const allShipsSunk = () => placedShips.length > 0 && placedShips.every((ship) => ship.isSunk())
 
   return {
     getBoard,
     getFleet,
-    getShips,
+    getplacedShips,
     getStatusMessage,
-    getShipLengths,
     getShipTypes,
-    createShip,
     placeShip,
-    autoPlaceShip,
     autoPlaceFleet,
     getAdjacentCells,
-    getAdjacentHorizontalCells,
     receiveAttack,
     allShipsSunk,
   }

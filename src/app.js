@@ -49,16 +49,16 @@ const View = () => {
     board2.appendChild(renderGrid(computerBoard))
   }
 
-  const renderBoards = (gameboard1, gameboard2) => {
+  const renderBoards = (playerBoard, computerBoard) => {
     board1.innerHTML = ''
     board2.innerHTML = ''
-    board1.appendChild(renderGrid(gameboard1))
-    board2.appendChild(renderGrid(gameboard2))
+    board1.appendChild(renderGrid(playerBoard))
+    board2.appendChild(renderGrid(computerBoard))
   }
 
-  // ** Refactor this. Render one board at a time. Separate click handler **
+  // * Refactor this. Render one board at a time. Separate click handler *
   // callback is the game.nextTurn function passed in by the Controller
-  const addGridListeners = (gameboard1, gameboard2, callback) => {
+  const addGridListeners = (playerBoard, computerBoard, callback) => {
     // Add listeners to computer's board
     const cells = document.querySelectorAll('#board2 .cell')
     cells.forEach((cell) => {
@@ -66,15 +66,15 @@ const View = () => {
         if (e.target.classList.contains('miss') || e.target.classList.contains('hit')) return
         const x = e.target.dataset.x
         const y = e.target.dataset.y
-        gameboard2.receiveAttack(x, y)
-        updateTurnStatus(gameboard2.getStatusMessage())
-        renderBoards(gameboard1, gameboard2)
-        checkGameStatus(gameboard1, gameboard2)
+        computerBoard.receiveAttack(x, y)
+        renderBoards(playerBoard, computerBoard)
+        checkGameStatus(playerBoard, computerBoard)
         // Process computer's turn and wait for timeout to complete before re-rendering
         await callback()
-        renderBoards(gameboard1, gameboard2)
-        checkGameStatus(gameboard1, gameboard2)
-        addGridListeners(gameboard1, gameboard2, callback)
+        updateStatus(computerBoard.getStatusMessage())
+        renderBoards(playerBoard, computerBoard)
+        checkGameStatus(playerBoard, computerBoard)
+        addGridListeners(playerBoard, computerBoard, callback)
       })
     })
   }
@@ -122,28 +122,21 @@ const View = () => {
     }, 200)
   }
 
-  const updateTurnStatus = (message) => {
-    status.innerHTML = '...'
-    setTimeout(() => {
-      status.textContent = message
-    }, 400)
-  }
-
-  // const isGameOver = () => playerBoard.allShipsSunk() || computerBoard.allShipsSunk()
-
+  // TODO: This logic shouldn't be here, it's already in the controller's Game instance
   const checkGameStatus = (playerBoard, computerBoard) => {
     if (playerBoard.allShipsSunk()) {
-      endGame('You Lost!')
+      gameOver('You Lost!')
       return true
     }
     if (computerBoard.allShipsSunk()) {
-      endGame('You Won!')
+      gameOver('You Won!')
       return true
     }
     return false
   }
 
-  const endGame = (message) => {
+  // End game by displaying game over modal
+  const gameOver = (message) => {
     setTimeout(() => {
       modal.firstChild.textContent = message
       modal.classList.add('active')
@@ -167,8 +160,6 @@ const View = () => {
     const dragDrop = (e) => {
       const cell = e.target
       const ship = playerBoard.getFleet()[Number(draggedShip.id.slice(-1))]
-      // const isVertical = ship.isVertical()
-      // const isHorizontal = !ship.isVertical()
       const isHorizontal = !draggedShip.classList.contains('vertical')
 
       const x = Number(cell.dataset.x) - (isHorizontal ? 0 : draggedShipIndex)
@@ -218,17 +209,18 @@ const View = () => {
       }
     }
     addDragAndDropEventListeners()
-    updateStatus(`Place your ${fleetContainer.firstChild.dataset.type}`)
+    updateStatus(`Place your ${fleetContainer.firstChild.dataset.type}`) // 'Place your Carrier'
   }
 
-  // ** Start Game Listener **
-  startButton.addEventListener('click', () => {
+  const startGame = () => {
     gameOptions.classList.toggle('inactive')
     board2.classList.remove('inactive')
     fleetContainer.classList.add('inactive')
     labels.forEach((label) => label.classList.remove('hidden'))
     updateStatus(`Click a cell on the enemy's board to place your first attack.`)
-  })
+  }
+
+  startButton.onclick = startGame
 
   return {
     renderBoards,
@@ -241,11 +233,8 @@ const View = () => {
 }
 
 const Controller = (game, view) => {
-  const placeShips = () => game.placeFleet(game.playerBoard)
   const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
   const autoPlaceShips = () => view.autoPlaceShips(game.placePlayerFleet)
-  const startGame = () => game.startGame()
-  // const drag = view.Drag(game.playerBoard)
 
   renderGame()
   autoPlaceShips()
@@ -254,7 +243,7 @@ const Controller = (game, view) => {
   view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
   view.addRotateListener()
 
-  return { renderGame, startGame }
+  return { renderGame }
 }
 
 init()
