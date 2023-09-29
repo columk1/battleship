@@ -142,7 +142,8 @@ const View = () => {
   // End game by displaying game over modal
   const gameOver = (message) => {
     setTimeout(() => {
-      modal.firstChild.textContent = message
+      let result = document.querySelector('.result')
+      result.textContent = message
       modal.classList.add('active')
       overlay.classList.add('active')
     }, 1500)
@@ -219,9 +220,22 @@ const View = () => {
   const startGame = () => {
     gameOptions.classList.toggle('inactive')
     board2.classList.remove('inactive')
+    animateBoard('board2')
     fleetContainer.classList.add('inactive')
     labels.forEach((label) => label.classList.remove('hidden'))
     updateStatus(`Click a cell on the enemy's board to place your first attack.`)
+  }
+
+  const animateBoard = (board = 'board1') => {
+    const cells = document.querySelectorAll(`#${board} .cell`)
+    cells.forEach((cell) => {
+      cell.classList.add('hidden')
+    })
+    cells.forEach((cell, index) => {
+      setTimeout(() => {
+        cell.classList.remove('hidden')
+      }, index * 5)
+    })
   }
 
   startButton.onclick = startGame
@@ -233,21 +247,29 @@ const View = () => {
     renderFleet,
     addRotateListener,
     initDragAndDrop,
+    animateBoard,
   }
 }
 
 const Controller = (game, view) => {
-  const renderGame = () => view.renderBoards(game.playerBoard, game.computerBoard)
-  const autoPlaceShips = () => view.autoPlaceShips(game.placePlayerFleet)
+  const renderGame = () => {
+    view.renderBoards(game.playerBoard, game.computerBoard)
+    view.animateBoard() // Not required
+    view.renderFleet(game.playerBoard.getShipTypes()) // Renders ships as draggables
+    initListeners()
+  }
+
+  // Binds the Game's function to the View's event listener
+  const bindAutoPlaceShips = () => view.autoPlaceShips(game.placePlayerFleet)
+
+  const initListeners = () => {
+    view.initDragAndDrop(game.playerBoard)
+    view.addRotateListener()
+    view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
+    bindAutoPlaceShips()
+  }
 
   renderGame()
-  autoPlaceShips()
-  view.renderFleet(game.playerBoard.getShipTypes())
-  view.initDragAndDrop(game.playerBoard)
-  view.addGridListeners(game.playerBoard, game.computerBoard, game.nextTurn)
-  view.addRotateListener()
-
-  return { renderGame }
 }
 
 init()
