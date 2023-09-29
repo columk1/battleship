@@ -359,7 +359,7 @@ footer {
 }
 
 /* Remove manual placement elements for touch devices */
-@media (hover: none) {
+@media (pointer: coarse), (pointer: none) {
   .fleet-container {
     display: none;
   }
