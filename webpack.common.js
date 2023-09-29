@@ -1,13 +1,9 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 module.exports = {
-  mode: 'development',
   entry: './src/app.js',
-  devtool: 'inline-source-map',
-  devServer: {
-    static: './dist',
-  },
   plugins: [
     new HtmlWebpackPlugin({
       title: 'Battleship',
@@ -19,9 +15,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     clean: true,
   },
-  //   optimization: {
-  //     runtimeChunk: 'single',
-  //   },
   module: {
     rules: [
       {
@@ -36,7 +29,7 @@ module.exports = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
+        use: [CssMinimizerPlugin.loader, 'style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
@@ -47,5 +40,8 @@ module.exports = {
         type: 'asset/resource',
       },
     ],
+  },
+  optimization: {
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
 }
