@@ -116,7 +116,9 @@ header {
   font-size: 1rem;
 }
 
-.btn:hover {
+.btn:hover,
+.btn:active,
+.btn:focus {
   outline: 1px solid var(--teal);
 }
 
